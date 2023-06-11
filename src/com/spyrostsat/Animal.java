@@ -1,6 +1,8 @@
 package com.spyrostsat;
 
 
+import java.util.Objects;
+
 public abstract class Animal implements IAnimal {
     private int id;
     private String name;
@@ -91,4 +93,19 @@ public abstract class Animal implements IAnimal {
     public String toString() {
         return getAnimalType() + "{id = " + getId() + ", name = " + getName() + ", category = " + getCategory() + ", weight = " + getWeight() + ", max age = " + getMax_age() + ", gender = " + getGender() + "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return id == animal.id && Double.compare(animal.weight, weight) == 0 && max_age == animal.max_age && Objects.equals(name, animal.name) && Objects.equals(category, animal.category) && gender == animal.gender && animalType == animal.animalType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, category, weight, max_age, gender, animalType);
+    }
+
+    public abstract void make_noise();
 }

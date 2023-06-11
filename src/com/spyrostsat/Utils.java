@@ -77,7 +77,7 @@ public class Utils {
 
             while (input.hasNextLine()) {
                 if (counter == 0) {
-                    counter++;
+                    counter++; // in line 0 of the file exist the titles of the fields, so we pass over that line
                     continue;
                 }
                 String line = input.nextLine();
@@ -88,16 +88,16 @@ public class Utils {
 
                 switch (animal_type) {
                     case "dog":
-                        all_animals.add(new Dog(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Dog));
+                        Utils.all_animals.add(new Dog(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Dog));
                         break;
                     case "cat":
-                        all_animals.add(new Cat(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Cat));
+                        Utils.all_animals.add(new Cat(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Cat));
                         break;
                     case "horse":
-                        all_animals.add(new Horse(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Horse));
+                        Utils.all_animals.add(new Horse(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Horse));
                         break;
                     case "bird":
-                        all_animals.add(new Bird(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Bird));
+                        Utils.all_animals.add(new Bird(Integer.parseInt(line_elements[0]), line_elements[1], line_elements[2], Double.parseDouble(line_elements[3]), Integer.parseInt(line_elements[4]), (line_elements[5].equals("male")) ? Gender.MALE : Gender.FEMALE, AnimalType.Bird));
                         break;
                 }
             }
@@ -234,37 +234,71 @@ public class Utils {
 
     static void delete_animal_by_id() {
         System.out.println("Let's remove an animal by its id!");
-        int id_to_delete;
+        String id_to_delete;
         System.out.print("ID: ");
         Scanner input = new Scanner(System.in);
-        id_to_delete = Integer.parseInt(input.nextLine());
-        int line_to_delete = id_to_delete + 1; // this is wrong
+        id_to_delete = input.nextLine();
 
-        ArrayList<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<String>();
+        
         File file = new File(Utils.FILEPATH);
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+
+        try {
+            Scanner file_input = new Scanner(file);
+
+            while (file_input.hasNextLine()) {
+                String line = file_input.nextLine();
                 lines.add(line);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        String modifiedLine = ""; // Example: new content for the line
-        lines.set(line_to_delete - 1, modifiedLine); // Subtract 1 from line number to get the correct index
+        int counter = 0;
+        int index_to_delete = -1;
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            for (String line : lines) {
-                writer.println(line);
+        for (String line : lines) {
+            String[] line_elements = line.split(",");
+            if (line_elements[0].equals(id_to_delete)) {
+                index_to_delete = counter;
+                break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            counter++;
+        }
+
+        if (index_to_delete != -1) {
+            lines.remove(index_to_delete);
+            try {
+                counter = 0;
+                for (String line : lines) {
+                    if (counter == 0) {
+                        FileWriter fileWriter = new FileWriter(Utils.FILEPATH, false);
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                        bufferedWriter.write(line);
+                        bufferedWriter.flush(); // Write the data to the file
+                    }
+                    else {
+                        FileWriter fileWriter = new FileWriter(Utils.FILEPATH, true);
+                        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(line);
+                        bufferedWriter.flush(); // Write the data to the file
+                    }
+                    counter++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+
+            System.out.println("\nThe animal with id " + id_to_delete + " has been removed from the zoo.\n");
+        }
+        else {
+            System.out.println("\nNo record with id " + id_to_delete + " was found at the zoo.\n");
         }
     }
 
     static void feed_animals() {
-        Utils.all_animals.clear();
         Utils.read_animals_from_file();
         System.out.println("\nLet's feed the animals:");
         for (Animal animal : Utils.all_animals) {

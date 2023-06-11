@@ -9,4 +9,10 @@ public class Bird extends Animal {
     public void feed() {
         System.out.println("The bird " + getName() + " is being fed...");
     }
+
+    @Override
+    public void make_noise() {
+        System.out.println("Making a bird noise");
+
+    }
 }

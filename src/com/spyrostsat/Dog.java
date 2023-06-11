@@ -10,4 +10,10 @@ public class Dog extends Animal {
     public void feed() {
         System.out.println("The dog " + getName() + " is being fed...");
     }
+
+    @Override
+    public void make_noise() {
+        System.out.println("Making a dog noise");
+
+    }
 }

@@ -9,4 +9,10 @@ public class Horse extends Animal {
     public void feed() {
         System.out.println("The horse " + getName() + " is being fed...");
     }
+
+    @Override
+    public void make_noise() {
+        System.out.println("Making a horse noise");
+
+    }
 }
