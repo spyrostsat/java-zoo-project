@@ -1,0 +1,6 @@
+id,name,category,weight,max_age,gender,animalType
+1,sally,mammal,50,15,male,dog
+2,kate,mammal,30,10,female,cat
+3,spyros,spyros,110.5,13,female,bird
+4,sally,mammal,50,15,male,bird
+5,sally,mammal,50,15,male,horse
