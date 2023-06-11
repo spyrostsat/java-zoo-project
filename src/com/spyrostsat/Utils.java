@@ -112,17 +112,30 @@ public class Utils {
     static void print_all_animals() {
         Utils.read_animals_from_file();
 
-        System.out.println("\nThe zoo has the following animals:");
-        for (Animal animal : Utils.all_animals) {
-            System.out.println(animal);
+        if (Utils.all_animals.size() > 0)
+        {
+            System.out.println("\nThe zoo has the following animals:");
+            for (Animal animal : Utils.all_animals) {
+                System.out.println(animal);
+            }
+            System.out.println("\n");
         }
-        System.out.println("\n");
+        else {
+            System.out.println("\nThe zoo has no entries yet.\n");
+        }
     }
 
     static void add_new_animal() {
         Utils.read_animals_from_file();
 
-        int new_id = all_animals.get(all_animals.size() - 1).getId() + 1;
+        int new_id = 1;
+        boolean empty_file = true;
+
+        if (Utils.all_animals.size() > 0)
+        {
+            new_id = all_animals.get(all_animals.size() - 1).getId() + 1;
+            empty_file = false;
+        }
 
         System.out.println("\nLet's add the new animal!");
         Scanner input = new Scanner(System.in);
@@ -175,7 +188,10 @@ public class Utils {
         try {
             FileWriter fileWriter = new FileWriter(Utils.FILEPATH, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.newLine();
+
+            if (!empty_file) {
+                bufferedWriter.newLine();
+            }
             bufferedWriter.write(entry);
             bufferedWriter.flush(); // Write the data to the file
         }
@@ -202,7 +218,7 @@ public class Utils {
             }
         }
         if (!found) {
-            System.out.println("No animal with the name " + name + "was found at the zoo.\n");
+            System.out.println("No animal with the name " + name + " was found at the zoo.\n");
         }
         else {
             System.out.println("\n");
@@ -214,18 +230,19 @@ public class Utils {
         System.out.println("\nLet's search an animal by its id!");
         System.out.print("ID: ");
         Scanner input = new Scanner(System.in);
-        int id = Integer.parseInt(input.nextLine());
+        String id = input.nextLine();
 
         System.out.println("We found the following animals:");
         boolean found = false;
         for (Animal animal : all_animals) {
-            if (animal.getId() == id) {
+            if (Integer.toString(animal.getId()).equals(id)) {
                 found = true;
                 System.out.println(animal);
+                break;
             }
         }
         if (!found) {
-            System.out.println("No animal with the ID " + id + "was found at the zoo.\n");
+            System.out.println("No animal with the ID " + id + " was found at the zoo.\n");
         }
         else {
             System.out.println("\n");

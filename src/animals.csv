@@ -1,6 +1,6 @@
-id,name,category,weight,max_age,gender,animalType
-1,sally,mammal,50,15,male,dog
-2,kate,mammal,30,10,female,cat
-3,spyros,spyros,110.5,13,female,bird
-4,sally,mammal,50,15,male,bird
-5,sally,mammal,50,15,male,horse
+1,rex,bulldog,12.3,15,male,dog
+2,sally,horsy,30.0,12,female,horse
+3,ron,birdy,6.0,3,male,bird
+4,mary,mammal,7.8,10,female,cat
+5,warHorse,mammal,43.5,17,male,horse
+6,rocko,mammal,9.9,11,female,dog
